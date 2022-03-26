@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        .target{
+            background-color: red;
+        }
+    </style>
 </head>
 <body>
 
     <ul>
-        <li th:each="dto : ${list}"> <!-- thymeleaf에서의 반복은 th:each라는 속성을 이용-->
-            [[${dto}]]               <!-- th:each = "변수 : ${목록}" -->
-        </li>
-    </ul>
+        <!--<li th:each="dto, state : ${list}" th:if="${dto.sno % 5 == 0}">  &lt;!&ndash;thymeleaf에서의 반복은 th:each라는 속성을 이용&ndash;&gt;
+            [[${dto}]]                       &lt;!&ndash;th:each = "변수 : ${목록}"&ndash;&gt;
+        </li>-->
 
+<!--        <li th:each="dto, state : ${list}">
+            <span th:if="${dto.sno % 5 == 0}" th:text="${'&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;' + dto.sno}"></span>
+            <span th:unless="${dto.sno % 5 == 0}" th:text="${dto.first}"></span>
+        </li>-->
+
+<!--        <li th:each="dto, state : ${list}" th:text="${dto.sno % 5 == 0}?${dto.sno}:${dto.first}">
+        </li>-->
+<!--        <li th:each="dto, state : ${list}" th:class="${dto.sno % 5 == 0}?'target'" th:text="${dto}">
+        </li>-->
+
+        <th:block th:each="dto: ${list}">
+            <li th:text="${dto.sno % 5 == 0}?${dto.sno}:${dto.first}"></li>
+        </th:block>
+    </ul>
 </body>
 </html>
