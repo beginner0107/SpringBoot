@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
                   // 실제 테이블은 BaseEntity클래스를 상속한 엔티티의 클래스로 데이터베이스 테이블이 생성
 @EntityListeners(value = {AuditingEntityListener.class})
 @Getter
-public class BaseEntity {
+abstract class BaseEntity {
 
     @CreatedDate
     @Column(name = "regdate", updatable = false)
