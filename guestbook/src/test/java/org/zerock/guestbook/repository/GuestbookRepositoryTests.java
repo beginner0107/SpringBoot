@@ -9,100 +9,84 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.zerock.guestbook.entity.GuestBook;
-import org.zerock.guestbook.entity.QGuestBook;
+import org.zerock.guestbook.entity.Guestbook;
+import org.zerock.guestbook.entity.QGuestbook;
 
 import java.util.Optional;
 import java.util.stream.IntStream;
 
 @SpringBootTest
 public class GuestbookRepositoryTests {
-
     @Autowired
     private GuestbookRepository guestbookRepository;
 
     @Test
-    public void insertDummies(){
-
-        IntStream.rangeClosed(1, 300).forEach(i -> {
-            GuestBook guestBook = GuestBook.builder()
+    public void insetDummies(){
+        IntStream.rangeClosed(1,300).forEach(i ->{
+            Guestbook guestbook = Guestbook.builder()
                     .title("Title...." + i)
                     .content("Content..." + i)
                     .writer("user" + (i%10))
                     .build();
-            System.out.println(guestbookRepository.save(guestBook));
+            System.out.println(guestbookRepository.save(guestbook));
         });
     }
 
     @Test
     public void updateTest(){
-
-        Optional<GuestBook> result = guestbookRepository.findById(300L);
-        // 존재하는 번호로 테스트
+        Optional<Guestbook> result = guestbookRepository.findById(300L);
 
         if(result.isPresent()){
+            Guestbook guestbook = result.get();
 
-            GuestBook guestbook = result.get();
-
-            guestbook.changeTitle("Change Title.....");
-            guestbook.changeContent("Change Content.....");
+            guestbook.changeTitle("Change Title...");
+            guestbook.changeContent("Change Content...");
 
             guestbookRepository.save(guestbook);
         }
-
     }
 
-    // 단일 항목 검색 테스트
     @Test
     public void testQuery1(){
+        Pageable pageable = PageRequest.of(0,10, Sort.by("gno").descending());
 
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
-
-        QGuestBook qGuestBook = QGuestBook.guestBook; // 1
-
-        String keyword = "1";
-
-        BooleanBuilder builder = new BooleanBuilder(); // 2
-
-        BooleanExpression expression = qGuestBook.title.contains(keyword); // 3
-
-        builder.and(expression); // 4
-
-        Page<GuestBook> result = guestbookRepository.findAll(builder, pageable); // 5
-
-        result.stream().forEach(guestBook -> {
-            System.out.println(guestBook);
-        });
-
-    }
-
-    // 다중 항목 검색 테스트
-    @Test
-    public void testQuery2(){
-
-        Pageable pageable = PageRequest.of(0, 10, Sort.by("gno").descending());
-
-        QGuestBook qGuestBook = QGuestBook.guestBook;
+        QGuestbook qGuestbook = QGuestbook.guestbook;
 
         String keyword = "1";
 
         BooleanBuilder builder = new BooleanBuilder();
 
-        BooleanExpression exTitle = qGuestBook.title.contains(keyword);
+        BooleanExpression expression = qGuestbook.title.contains(keyword);
 
-        BooleanExpression exContent = qGuestBook.content.contains(keyword);
+        builder.and(expression);
 
-        BooleanExpression exAll = exTitle.or(exContent); // 1
+        Page<Guestbook> result = guestbookRepository.findAll(builder, pageable);
 
-        builder.and(exAll);
-
-        builder.and(qGuestBook.gno.gt(0L)); // 3
-
-        Page<GuestBook> result = guestbookRepository.findAll(builder, pageable);
-
-        result.stream().forEach(guestBook -> {
-            System.out.println(guestBook);
+        result.stream().forEach(s ->{
+            System.out.println(s.toString());
         });
     }
 
+    @Test
+    public void testQuery2(){
+        Pageable pageable = PageRequest.of(0,10, Sort.by("gno").descending());
+
+        QGuestbook qGuestbook = QGuestbook.guestbook;
+
+        String keyword = "1";
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        BooleanExpression exTitle = qGuestbook.title.contains(keyword);
+
+        BooleanExpression exContent = qGuestbook.content.contains(keyword);
+
+        builder.and(exTitle).and(exContent);
+
+        Page<Guestbook> result = guestbookRepository.findAll(builder, pageable);
+
+        result.stream().forEach(guestbook -> {
+            System.out.println(guestbook);
+        });
+    }
 }

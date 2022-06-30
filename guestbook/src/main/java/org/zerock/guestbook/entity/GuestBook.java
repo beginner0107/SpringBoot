@@ -4,14 +4,13 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Entity(name = "guestbook")
+@Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class GuestBook extends BaseEntity{
-
+public class Guestbook extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gno;
