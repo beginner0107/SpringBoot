@@ -11,7 +11,7 @@ import java.util.Map;
 @Repository
 public class ItemRepository {
 
-    private static final Map<Long, Item> store = new HashMap<>();
+    private static final Map<Long, Item> store = new HashMap<>(); //동시성 문제 ConcurrentHashMap()
     private static long sequence = 0L;
 
     // 저장
