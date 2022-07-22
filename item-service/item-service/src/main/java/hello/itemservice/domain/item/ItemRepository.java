@@ -14,7 +14,6 @@ public class ItemRepository {
     private static final Map<Long, Item> store = new HashMap<>(); //동시성 문제 ConcurrentHashMap()
     private static long sequence = 0L;
 
-    // 저장
     public Item save(Item item){
         item.setId(++sequence);
         store.put(item.getId(), item);
